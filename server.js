@@ -4,8 +4,13 @@
 // init project
 require('dotenv').config();
 var express = require('express');
+const morgan = require('morgan')
+
 var app = express();
 
+
+//load third-party middleware
+app.use(morgan('dev'))
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
@@ -18,13 +23,17 @@ app.use(express.static('public'));
 app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
-
+var useragent = require('express-useragent');
+ 
+app.use(useragent.express());
 
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+const route=require("./routes")
+app.use('/api', route)
 
 
 // listen for requests :)
